@@ -1,0 +1,45 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>CAMERA_GetImage</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2013-06-04"><meta name="DC.source" content="script_CAMERA_GetImage.m">
+<link type="text/css" rel="stylesheet" href="../../style.css">
+  </head><body><div class="content"><h1>CAMERA_GetImage</h1><!--introduction--><p>Returns an Image from the NXTCam</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Syntax</a></li><li><a href="#4">Description</a></li><li><a href="#10">Example</a></li><li><a href="#14">Signature</a></li></ul></div><h2>Syntax<a name="1"></a></h2><p>|image = CAMERA_GetImage(port) |</p><p>|image = CAMERA_GetImage(port, handle) |</p><h2>Description<a name="4"></a></h2><p>Returns an Image from the Vision Subsystem v4 for NXT (NXTCam-v4)</p><p><b>Note:</b></p><p>The camera has to be connected directly via USB!</p><h2>Example<a name="10"></a></h2><pre class="codeinput">  image = CAMERA_GetImage(SENSOR_1);
+</pre><h2>Signature<a name="14"></a></h2><div><ul><li><b>Author:</b> Martin Staas</li><li><b>Date:</b> 2012/10/30</li><li><b>Copyright:</b> 2007-2013, RWTH Aachen University</li></ul></div><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with wg_publish; V1.0<br></p></div><!--
+##### SOURCE BEGIN #####
+%% CAMERA_GetImage
+% Returns an Image from the NXTCam
+%%
+%%
+%% Syntax
+% |image = CAMERA_GetImage(port) |
+%%
+% |image = CAMERA_GetImage(port, handle) |
+%%
+%% Description
+% Returns an Image from the Vision Subsystem v4 for NXT (NXTCam-v4)
+%%
+%%
+%%
+% *Note:*
+%%
+% The camera has to be connected directly via USB!
+%%
+%% Example
+%%
+  image = CAMERA_GetImage(SENSOR_1);
+%%
+%%
+%% Signature
+%%
+% * *Author:* Martin Staas
+% * *Date:* 2012/10/30
+% * *Copyright:* 2007-2013, RWTH Aachen University
+%
+
+##### SOURCE END #####
+--></body></html>

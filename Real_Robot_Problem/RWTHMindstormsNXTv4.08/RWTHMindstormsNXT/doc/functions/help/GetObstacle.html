@@ -1,0 +1,64 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>GetObstacle</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2013-06-04"><meta name="DC.source" content="script_GetObstacle.m">
+<link type="text/css" rel="stylesheet" href="../../style.css">
+  </head><body><div class="content"><h1>GetObstacle</h1><!--introduction--><p>Reads the current value of the Dual Range, Triple Zone Infrared Obstacle Detector for NXT (NXTSumoEyes-v2)</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Syntax</a></li><li><a href="#4">Description</a></li><li><a href="#7">Examples</a></li><li><a href="#12">See also</a></li><li><a href="#14">Signature</a></li></ul></div><h2>Syntax<a name="1"></a></h2><p><tt>direction = GetObstacle(port)</tt></p><p><tt>direction = GetObstacle(port, handle)</tt></p><h2>Description<a name="4"></a></h2><p><tt>direction = GetObstacle(port)</tt> returns a Number from 0 to 3 which represent the three Zones where an Object can be detected. 2 means the left, 1 the center and 3 the right Zone and 0 means no Obstacle found. The given <tt>port</tt> number specifies the connection port. The value <tt>port</tt> can be addressed by the symbolic constants <tt>SENSOR_1</tt> , <tt>SENSOR_2</tt>, <tt>SENSOR_3</tt> and <tt>SENSOR_4</tt> analog to the labeling on the NXT Brick.</p><p>The last optional argument can be a valid NXT handle. If none is specified, the default handle will be used (call <tt>COM_SetDefaultNXT</tt> to set one).</p><h2>Examples<a name="7"></a></h2><pre class="codeinput">   OpenObstacle(SENSOR_1, <span class="string">'ACTIVE'</span>);
+   zone = GetObstacle(SENSOR_1);
+   CloseSensor(SENSOR_1);
+</pre><p><a href="<b>Note:</b>.html"><b>Note:</b></a>, </p><p>(from the official documentation) This distance of the Ranges changes based on NXT battery power and load on the batteries (such as running/stalled motors) at the time of reading and reflectivity of the obstacle, e.g. a white paper obstacle is detectable at a farther distance than a dark object. Detection range of very dark objects is reduced considerably (to half or third).</p><h2>See also<a name="12"></a></h2><p>OpenObstacle, CloseSensor, NXT_GetInputValues, SENSOR_1, SENSOR_2, SENSOR_3, SENSOR_4</p><h2>Signature<a name="14"></a></h2><div><ul><li><b>Author:</b> Rainer Schnitzler, Martin Staas (see AUTHORS)</li><li><b>Date:</b> 2012/10/22</li><li><b>Copyright:</b> 2007-2013, RWTH Aachen University</li></ul></div><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with wg_publish; V1.0<br></p></div><!--
+##### SOURCE BEGIN #####
+%% GetObstacle
+% Reads the current value of the Dual Range, Triple Zone Infrared Obstacle Detector for NXT (NXTSumoEyes-v2)
+%%
+%% Syntax
+% |direction = GetObstacle(port)|
+%%
+% |direction = GetObstacle(port, handle)|
+%%
+%% Description
+% |direction = GetObstacle(port)| returns a Number from 0 to 3 which
+% represent the three Zones where an Object can be detected.
+% 2 means the left, 1 the center and 3 the right Zone and 0 means no
+% Obstacle found.
+% The given |port| number specifies the connection port. The value |port| can be
+% addressed by the symbolic constants |SENSOR_1| , |SENSOR_2|, |SENSOR_3| and |SENSOR_4| analog to
+% the labeling on the NXT Brick.
+%%
+% The last optional argument can be a valid NXT handle. If none is
+% specified, the default handle will be used (call |COM_SetDefaultNXT| to
+% set one).
+%%
+%% Examples
+   OpenObstacle(SENSOR_1, 'ACTIVE');
+   zone = GetObstacle(SENSOR_1);
+   CloseSensor(SENSOR_1);
+%%
+%%
+% *Note:*
+%%
+% (from the official documentation)
+% This distance of the Ranges changes based on NXT battery power
+% and load on the batteries (such as running/stalled motors) at the
+% time of reading and reflectivity of the obstacle, e.g. a white paper
+% obstacle is detectable at a farther distance than a dark object.
+% Detection range of very dark objects is reduced considerably (to
+% half or third).
+%%
+%% See also
+% OpenObstacle, CloseSensor, NXT_GetInputValues, SENSOR_1, SENSOR_2, SENSOR_3, SENSOR_4
+%%
+%% Signature
+%%
+% * *Author:* Rainer Schnitzler, Martin Staas (see AUTHORS)
+% * *Date:* 2012/10/22
+% * *Copyright:* 2007-2013, RWTH Aachen University
+%
+
+##### SOURCE END #####
+--></body></html>

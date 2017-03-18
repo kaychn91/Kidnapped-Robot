@@ -1,0 +1,63 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>CAMERA_SetColormap</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2013-06-04"><meta name="DC.source" content="script_CAMERA_SetColormap.m">
+<link type="text/css" rel="stylesheet" href="../../style.css">
+  </head><body><div class="content"><h1>CAMERA_SetColormap</h1><!--introduction--><p>Sets the Colormap of the NXTCam on given Port</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Syntax</a></li><li><a href="#4">Description</a></li><li><a href="#10">Example</a></li><li><a href="#13">See also</a></li><li><a href="#15">Signature</a></li></ul></div><h2>Syntax<a name="1"></a></h2><p>|CAMERA_SetColormap(port, colormap) |</p><p>|CAMERA_SetColormap(port, colormap, handle) |</p><h2>Description<a name="4"></a></h2><p>|CAMERA_SetColormap(port, colormap) | sets the bit coded colormap of NXTCam to 'colormap'. The Colormap consist of 48 byte. Each of RGB Color is assigned 16 bytes for that color and every bit show if the Object number should contain that Color. Each 16 color Bytes represent absolute color value ranges. The first Byte of Red has the Range from 0 to 15, if we want to Track an Object that has this Color Value we can set the appropiate bit (0-7) to one.</p><p><b>Note:</b></p><p>If you want to know about how exactly colormaps work have a look at the documentation of your NXTCam or the Colormap Reference which both can be found at: <a href="http://www.mindsensors.com/">http://www.mindsensors.com/</a></p><h2>Example<a name="10"></a></h2><pre class="codeinput">  OpenCamera(SENSOR_1);
+  colormap = CAMERA_GetColormap(SENSOR_1);
+  colormap(1,1) = 1; <span class="comment">%set first Bit of Red 0 - 15</span>
+  CAMERA_SetColormap(SENSOR_1, colormap);
+  CloseSensor(SENSOR_1);
+</pre><h2>See also<a name="13"></a></h2><p><a href="OpenCamera.html">OpenCamera</a>, <a href="CAMERA_GetColormap.html">CAMERA_GetColormap</a>, <a href="CloseSensor.html">CloseSensor</a>, </p><h2>Signature<a name="15"></a></h2><div><ul><li><b>Author:</b> Martin Staas</li><li><b>Date:</b> 2012/10/30</li><li><b>Copyright:</b> 2007-2013, RWTH Aachen University</li></ul></div><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with wg_publish; V1.0<br></p></div><!--
+##### SOURCE BEGIN #####
+%% CAMERA_SetColormap
+% Sets the Colormap of the NXTCam on given Port
+%%
+%% Syntax
+% |CAMERA_SetColormap(port, colormap) |
+%%
+% |CAMERA_SetColormap(port, colormap, handle) |
+%%
+%% Description
+% |CAMERA_SetColormap(port, colormap) | sets the bit coded colormap of
+% NXTCam to 'colormap'. The Colormap consist of 48 byte.
+% Each of RGB Color is assigned 16 bytes for that color and every bit
+% show if the Object number should contain that Color.
+% Each 16 color Bytes represent absolute color value ranges.
+% The first Byte of Red has the Range from 0 to 15, if we want to Track
+% an Object that has this Color Value we can set the appropiate bit (0-7)
+% to one.
+%%
+%%
+% *Note:*
+%%
+% If you want to know about how exactly colormaps work have a look
+% at the documentation of your NXTCam or the Colormap Reference which
+% both can be found at: http://www.mindsensors.com/
+%%
+%%
+%% Example
+%%
+  OpenCamera(SENSOR_1);
+  colormap = CAMERA_GetColormap(SENSOR_1);
+  colormap(1,1) = 1; %set first Bit of Red 0 - 15
+  CAMERA_SetColormap(SENSOR_1, colormap);
+  CloseSensor(SENSOR_1);
+%%
+%% See also
+% OpenCamera, CAMERA_GetColormap, CloseSensor
+%%
+%% Signature
+%%
+% * *Author:* Martin Staas
+% * *Date:* 2012/10/30
+% * *Copyright:* 2007-2013, RWTH Aachen University
+%
+
+##### SOURCE END #####
+--></body></html>

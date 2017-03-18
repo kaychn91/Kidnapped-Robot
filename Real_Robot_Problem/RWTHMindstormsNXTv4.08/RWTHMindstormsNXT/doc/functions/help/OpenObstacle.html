@@ -1,0 +1,52 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>OpenObstacle</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2013-06-04"><meta name="DC.source" content="script_OpenObstacle.m">
+<link type="text/css" rel="stylesheet" href="../../style.css">
+  </head><body><div class="content"><h1>OpenObstacle</h1><!--introduction--><p>Initializes the NXT Dual Range, Triple Zone Infrared Obstacle sensor, sets correct sensor mode (Sensor is also called NXTSumoEyes-v2)</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Syntax</a></li><li><a href="#4">Description</a></li><li><a href="#7">Example</a></li><li><a href="#9">See also</a></li><li><a href="#11">Signature</a></li></ul></div><h2>Syntax<a name="1"></a></h2><p><tt>OpenObstacle(port, mode)</tt></p><p><tt>OpenObstacle(port, mode, handle)</tt></p><h2>Description<a name="4"></a></h2><p><tt>OpenObstacle(port, mode)</tt> initializes the input mode of NXT obstacle sensor specified by the sensor <tt>port</tt> and the Range <tt>mode</tt>. The value <tt>port</tt> can be addressed by the symbolic constants <tt>SENSOR_1</tt> , <tt>SENSOR_2</tt>, <tt>SENSOR_3</tt> and <tt>SENSOR_4</tt> analog to the labeling on the NXT Brick. The <tt>mode</tt> represents one of two modes <tt>'SHORT'</tt> (for Ranges up to 15 cm) and <tt>'LONG'</tt> (for Ranges up to 30 cm).</p><p>The last optional argument can be a valid NXT handle. If none is specified, the default handle will be used (call <tt>COM_SetDefaultNXT</tt> to set one).</p><h2>Example<a name="7"></a></h2><pre class="codeinput">   OpenObstacle(SENSOR_1, <span class="string">'ACTIVE'</span>);
+   direction = GetObstacle(SENSOR_1);
+   CloseSensor(SENSOR_1);
+</pre><h2>See also<a name="9"></a></h2><p><a href="CloseSensor.html">CloseSensor</a>, <a href="GetObstacle.html">GetObstacle</a>, <a href="OpenNXT2Color.html">OpenNXT2Color</a>, <a href="GetNXT2Color.html">GetNXT2Color</a>, <a href="NXT_SetInputMode.html">NXT_SetInputMode</a>, <a href="SENSOR_1.html">SENSOR_1</a>, <a href="SENSOR_2.html">SENSOR_2</a>, <a href="SENSOR_3.html">SENSOR_3</a>, <a href="SENSOR_4.html">SENSOR_4</a>, </p><h2>Signature<a name="11"></a></h2><div><ul><li><b>Author:</b> Martin Staas (see AUTHORS)</li><li><b>Date:</b> 2012/10/22</li><li><b>Copyright:</b> 2007-2013, RWTH Aachen University</li></ul></div><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with wg_publish; V1.0<br></p></div><!--
+##### SOURCE BEGIN #####
+%% OpenObstacle
+% Initializes the NXT Dual Range, Triple Zone Infrared Obstacle sensor, sets correct sensor mode
+% (Sensor is also called NXTSumoEyes-v2)
+%%
+%% Syntax
+% |OpenObstacle(port, mode)|
+%%
+% |OpenObstacle(port, mode, handle)|
+%%
+%% Description
+% |OpenObstacle(port, mode)| initializes the input mode of NXT obstacle sensor specified by the sensor
+% |port| and the Range |mode|. The value |port| can be addressed by the symbolic constants
+% |SENSOR_1| , |SENSOR_2|, |SENSOR_3| and |SENSOR_4| analog to the labeling on the NXT Brick. The
+% |mode| represents one of two modes |'SHORT'| (for Ranges up to 15 cm) and |'LONG'|
+% (for Ranges up to 30 cm).
+%%
+% The last optional argument can be a valid NXT handle. If none is
+% specified, the default handle will be used (call |COM_SetDefaultNXT| to
+% set one).
+%%
+%% Example
+   OpenObstacle(SENSOR_1, 'ACTIVE');
+   direction = GetObstacle(SENSOR_1);
+   CloseSensor(SENSOR_1);
+%%
+%% See also
+% CloseSensor, GetObstacle, OpenNXT2Color, GetNXT2Color, NXT_SetInputMode, SENSOR_1, SENSOR_2, SENSOR_3, SENSOR_4
+%%
+%% Signature
+%%
+% * *Author:* Martin Staas (see AUTHORS)
+% * *Date:* 2012/10/22
+% * *Copyright:* 2007-2013, RWTH Aachen University
+%
+
+##### SOURCE END #####
+--></body></html>

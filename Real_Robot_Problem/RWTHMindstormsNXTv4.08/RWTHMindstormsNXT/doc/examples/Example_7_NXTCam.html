@@ -1,0 +1,187 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Example 7: NXTCam support</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2013-06-04"><meta name="DC.source" content="Example_7_NXTCam.m">
+<link type="text/css" rel="stylesheet" href="../style.css">
+  </head><body><div class="content"><h1>Example 7: NXTCam support</h1><!--introduction--><p>Track Objects with the NXTCam</p><p>This Example shows how you can use the Toolbox to Track Objects with the NXTCam</p><p>Signature</p><div><ul><li>Author: Martin Staas</li><li>Date: 2013/06/04</li><li>License: BSD</li><li>RWTH - Mindstorms NXT Toolbox: <a href="http://www.mindstorms.rwth-aachen.de">http://www.mindstorms.rwth-aachen.de</a></li></ul></div><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">verify that the RWTH - Mindstorms NXT toolbox is installed.</a></li><li><a href="#2">Prepare</a></li><li><a href="#3">Connect to NXT via USB</a></li><li><a href="#4">Clean up</a></li></ul></div><h2>verify that the RWTH - Mindstorms NXT toolbox is installed.<a name="1"></a></h2><pre class="codeinput"><span class="keyword">if</span> verLessThan(<span class="string">'RWTHMindstormsNXT'</span>, <span class="string">'4.08'</span>);
+    error(strcat(<span class="string">'This program requires the RWTH - Mindstorms NXT Toolbox '</span> <span class="keyword">...</span>
+        ,<span class="string">'version 4.08 or greater. Go to http://www.mindstorms.rwth-aachen.de '</span><span class="keyword">...</span>
+        ,<span class="string">'and follow the installation instructions!'</span>));
+<span class="keyword">end</span><span class="comment">%if</span>
+</pre><h2>Prepare<a name="2"></a></h2><pre class="codeinput">COM_CloseNXT <span class="string">all</span>
+close <span class="string">all</span>
+clear <span class="string">all</span>
+</pre><h2>Connect to NXT via USB<a name="3"></a></h2><pre class="codeinput">handle = COM_OpenNXT();
+COM_SetDefaultNXT(handle);
+
+<span class="comment">%%Open the Camera</span>
+OpenCamera(SENSOR_1,<span class="string">'BLOBS'</span>);
+pause(0.5);
+
+<span class="comment">%%Set params</span>
+frames 	= 0;
+objectPos  = zeros(8,2);
+thresh  = 100;
+alpha   = 0.15;
+tic;
+colors  = [<span class="string">'r'</span>,<span class="string">'g'</span>,<span class="string">'b'</span>,<span class="string">'y'</span>,<span class="string">'m'</span>,<span class="string">'c'</span>,<span class="string">'b'</span>,<span class="string">'r'</span>];
+markers = [<span class="string">'.'</span>,<span class="string">'*'</span>,<span class="string">'.'</span>,<span class="string">'*'</span>,<span class="string">'.'</span>,<span class="string">'*'</span>,<span class="string">'.'</span>,<span class="string">'*'</span>];
+trackPoints   = zeros(20,2);
+filtered = 0;
+
+<span class="comment">%%Run for 5000 Frames</span>
+ <span class="keyword">for</span> j = 1:5000
+        frames = frames + 1;<span class="comment">%count Frames</span>
+        clf
+        rectangle(<span class="string">'Position'</span>,[0,0,250,250])<span class="comment">%draw border</span>
+        hold <span class="string">on</span>
+        <span class="comment">%%Get Objects from the Camera</span>
+        [nrObj obj] = GetCamera(SENSOR_1);
+
+        <span class="comment">%%Print general Information</span>
+        text(10,240,[<span class="string">'\it{Nr. of Objects:}'</span>,int2str(nrObj)])
+        text(10,230,[<span class="string">'\it{Frame:}'</span>,int2str(j)])
+        text(10,210,[<span class="string">'\it{Filtered:}'</span>,int2str(filtered)])
+
+        <span class="comment">%%filter objects by size to reduce noise effects and get new Position</span>
+        filteredNr = 0;
+        <span class="keyword">for</span> i = 1:size(obj,1)
+            <span class="keyword">if</span>(abs((obj(i,2)-obj(i,4))*(obj(i,3)-obj(i,5))) &gt; thresh)
+                idx = obj(i,1) + 1;
+                objectPos(idx,:) = [(objectPos(idx,1)*(1-alpha) + ((obj(i,2) + obj(i,4))/2)*alpha) (objectPos(idx,2)*(1-alpha) + ((obj(i,3) + obj(i,5))/2)*alpha)];
+            <span class="keyword">else</span>
+                filteredNr = filteredNr +1;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span><span class="comment">%end for</span>
+        newPos = objectPos;
+        trackPoints = [trackPoints(2:end,:);newPos(1,:)];
+        filtered = filtered + filteredNr;
+
+        <span class="comment">%%plot Objects</span>
+        <span class="keyword">for</span> i = 1:size(objectPos,1);
+            <span class="keyword">if</span>((objectPos(i,1) + objectPos(i,2)) &gt; 0)
+                plot(objectPos(i,1),143-objectPos(i,2),[colors(i) markers(i)],<span class="string">'MarkerSize'</span>,20)
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+        plot(trackPoints(:,1),143-trackPoints(:,2),<span class="string">'r-'</span>);
+        hold <span class="string">off</span>
+
+        <span class="comment">%%compute and plot FPS</span>
+        <span class="keyword">if</span>(toc &gt; 1)
+            fps = frames/toc;
+            text(10,220,[<span class="string">'\it{FPS:}'</span>,int2str(uint8(fps))])
+        <span class="keyword">end</span>
+        <span class="keyword">if</span>(toc &gt; 10)
+            tic;
+            frames = 0;
+        <span class="keyword">end</span>
+         pause(0.01);
+ <span class="keyword">end</span>
+</pre><h2>Clean up<a name="4"></a></h2><pre class="codeinput">CloseSensor(SENSOR_1);
+COM_CloseNXT(<span class="string">'all'</span>);
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Example 7: NXTCam support
+% Track Objects with the NXTCam
+%
+% This Example shows how you can use the Toolbox to Track Objects with the NXTCam
+%
+% Signature
+%
+% *  Author: Martin Staas
+% *  Date: 2013/06/04
+% *  License: BSD
+% *  RWTH - Mindstorms NXT Toolbox: http://www.mindstorms.rwth-aachen.de
+
+%% verify that the RWTH - Mindstorms NXT toolbox is installed.
+if verLessThan('RWTHMindstormsNXT', '4.08');
+    error(strcat('This program requires the RWTH - Mindstorms NXT Toolbox ' ...
+        ,'version 4.08 or greater. Go to http://www.mindstorms.rwth-aachen.de '...
+        ,'and follow the installation instructions!'));
+end%if
+
+%% Prepare
+COM_CloseNXT all
+close all
+clear all
+
+%% Connect to NXT via USB 
+handle = COM_OpenNXT();
+COM_SetDefaultNXT(handle);
+
+%%Open the Camera
+OpenCamera(SENSOR_1,'BLOBS');
+pause(0.5);
+
+%%Set params
+frames 	= 0;
+objectPos  = zeros(8,2);
+thresh  = 100;
+alpha   = 0.15;
+tic;
+colors  = ['r','g','b','y','m','c','b','r'];
+markers = ['.','*','.','*','.','*','.','*'];
+trackPoints   = zeros(20,2);
+filtered = 0;
+
+%%Run for 5000 Frames
+ for j = 1:5000
+        frames = frames + 1;%count Frames
+        clf
+        rectangle('Position',[0,0,250,250])%draw border
+        hold on
+        %%Get Objects from the Camera
+        [nrObj obj] = GetCamera(SENSOR_1);
+
+        %%Print general Information
+        text(10,240,['\it{Nr. of Objects:}',int2str(nrObj)]) 
+        text(10,230,['\it{Frame:}',int2str(j)]) 
+        text(10,210,['\it{Filtered:}',int2str(filtered)]) 
+    
+        %%filter objects by size to reduce noise effects and get new Position
+        filteredNr = 0;
+        for i = 1:size(obj,1)  
+            if(abs((obj(i,2)-obj(i,4))*(obj(i,3)-obj(i,5))) > thresh)
+                idx = obj(i,1) + 1;
+                objectPos(idx,:) = [(objectPos(idx,1)*(1-alpha) + ((obj(i,2) + obj(i,4))/2)*alpha) (objectPos(idx,2)*(1-alpha) + ((obj(i,3) + obj(i,5))/2)*alpha)];
+            else
+                filteredNr = filteredNr +1;
+            end
+        end%end for
+        newPos = objectPos;
+        trackPoints = [trackPoints(2:end,:);newPos(1,:)];
+        filtered = filtered + filteredNr;
+
+        %%plot Objects
+        for i = 1:size(objectPos,1);
+            if((objectPos(i,1) + objectPos(i,2)) > 0)
+                plot(objectPos(i,1),143-objectPos(i,2),[colors(i) markers(i)],'MarkerSize',20)
+            end
+        end
+        plot(trackPoints(:,1),143-trackPoints(:,2),'r-');
+        hold off
+
+        %%compute and plot FPS
+        if(toc > 1)
+            fps = frames/toc;
+            text(10,220,['\it{FPS:}',int2str(uint8(fps))]) 
+        end
+        if(toc > 10)
+            tic;
+            frames = 0;
+        end
+         pause(0.01);
+ end
+%% Clean up
+CloseSensor(SENSOR_1);
+COM_CloseNXT('all');
+
+
+
+##### SOURCE END #####
+--></body></html>

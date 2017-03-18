@@ -1,0 +1,14 @@
+RWTH - Mindstorms NXT Toolbox version 4.08 (milestone)
+
+    * New features:
+          o Support for "Vision Subsystem v4 for NXT (NXTCam-v4)"
+          o Support for "Dual Range, Triple Zone Infrared Obstacle Detector for NXT (NXTSumoEyes-v2)"
+          o Added ID check for digital sensors in Open-functions
+    * Known bugs and limitations:
+          o We get warnings when loading "libusb_win32", see Ticket #79!
+          o Bluetooth support for Windows 64 Bit is slow!
+          o NXTCam support is still beta!
+          o MacOs support is not tested
+          o Linux 64 Bit is not tested
+          o For an up-to-date list of bugs, issues and feature requests, see http://www.mindstorms.rwth-aachen.de/trac/report
+    * June 4th, 2013
