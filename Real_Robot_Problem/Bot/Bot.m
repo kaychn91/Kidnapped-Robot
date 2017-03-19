@@ -3,8 +3,8 @@ classdef Bot
     %   Detailed explanation goes here
     
     properties (Constant)
-        RobotRadius_m = 0.060;
-        WheelRadius_m = 0.030;
+        RobotRadius_m = 0.058;
+        WheelRadius_m = 0.028;
         WheelCircumference_m = 2*pi*Bot.WheelRadius_m;
     end
     
@@ -77,14 +77,15 @@ classdef Bot
         
         function distances_cm = ultraScan(bot,numOfScans)
 
-            survey = bot.survey(50, 360/numOfScans);
+            survey = bot.survey(-50, 360/numOfScans);
             distances_cm = [ 
                 survey(1, 2); 
                 survey(2, 2); 
                 survey(3, 2); 
                 survey(4, 2); 
                 survey(5, 2); 
-                survey(6, 2); ]; 
+                survey(6, 2);
+                ]; 
                 
         end
         

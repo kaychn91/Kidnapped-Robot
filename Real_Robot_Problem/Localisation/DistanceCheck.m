@@ -2,13 +2,13 @@ function [bot] = DistanceCheck(bot,map,target)
 
 scans = 6;
 turnBot = pi/4;
-num = 500;
+num = 600;
 particles(num,1) = BotSim;
 variance = 60;
 
 for i = 1:num
     particles(i) = BotSim(map);  %each particle should use the same map as the botSim object
-    particles(i).randomPose(10); %spawn the particles in random locations
+    particles(i).randomPose(0); %spawn the particles in random locations
     particles(i).setScanConfig(particles(i).generateScanConfig(scans));
 end
 
@@ -20,11 +20,10 @@ while(n < maxNumOfIterations)
     botScan = bot.ultraScan(scans);
     
     botScan
-    turn = pi/4;
-    bot.turn(turn);
+    
     scanflag = 0;
     for i = 1:length(botScan)
-        if (botScan(i,:) < 13 || botScan(i,:) > 200)
+        if (botScan(i,:) < 10 || botScan(i,:) > 200)
             scanflag = 1;
             break;
         end
@@ -32,8 +31,21 @@ while(n < maxNumOfIterations)
     
     if(scanflag == 1)
         bot.turn(turnBot);
+        for i =1:num %for all the particles.
+        particles(i).turn(turnBot); 
+        end
+        botScan = bot.ultraScan(scans);
     end
     
+    figure(3)
+        hold off; %the drawMap() function will clear the drawing when hold is off
+        particles(1).drawMap(); %drawMap() turns hold back on again, so you can draw the botsn
+        for i =1:num
+            particles(i).drawBot(3); %draw particle with line length 3 and default color
+        end
+%         Friend_mean.drawBot(30, 'r');
+        drawnow;
+        
     weight = zeros(num,1);
     sub = zeros(scans,num);
     p_w = zeros(scans,1);
@@ -61,7 +73,16 @@ while(n < maxNumOfIterations)
     w_distribution = weight./sum(weight);
     %% Write code for resampling your particles
     
-    for i = 1:num
+    figure(3)
+        hold off; %the drawMap() function will clear the drawing when hold is off
+        particles(1).drawMap(); %drawMap() turns hold back on again, so you can draw the botsn
+        for i =1:num
+            particles(i).drawBot(3); %draw particle with line length 3 and default color
+        end
+%         Friend_mean.drawBot(30, 'r');
+        drawnow;
+        
+    for i = 1:num 
         j = find(rand() <= cumsum(w_distribution),1);
         particles(i).setBotPos(particles(j).getBotPos());
         particles(i).setBotAng(particles(j).getBotAng());
@@ -80,15 +101,7 @@ while(n < maxNumOfIterations)
     Friend_mean.setScanConfig(Friend_mean.generateScanConfig(scans));
     Friend_mean.setBotAng(mean(ang));
     Friend_mean.setBotPos(mean(pos));
-    
-%     botScan = bot.ultraScan();
-    difference_mean= zeros(360,1);
-    
-    for i=1:360   
-    Friend_meanScan = Friend_mean.ultraScan();
-    difference_mean(i) = norm(Friend_meanScan-botScan);
-    Friend_mean.setBotAng(i*pi/180);
-    end
+
     
         figure(3)
         hold off; %the drawMap() function will clear the drawing when hold is off
@@ -98,7 +111,7 @@ while(n < maxNumOfIterations)
         end
         Friend_mean.drawBot(30, 'r');
         drawnow;
-        
+       
      %% Write code to check for convergence   
 
     if std(pos) < 5 % convergence threshold
@@ -112,6 +125,15 @@ while(n < maxNumOfIterations)
         particles(randi(num)).randomPose(10);
     end
     
+    figure(3)
+        hold off; %the drawMap() function will clear the drawing when hold is off
+        particles(1).drawMap(); %drawMap() turns hold back on again, so you can draw the botsn
+        for i =1:num
+            particles(i).drawBot(3); %draw particle with line length 3 and default color
+        end
+        Friend_mean.drawBot(30, 'r');
+        drawnow;
+        
      %% Write code to decide how to move next
     distanceToObstacle = bot.scanInFront_cm();
     
@@ -121,7 +143,7 @@ while(n < maxNumOfIterations)
         move = 0;
     end
 
-    turn = pi/4;
+    turn = pi/2;
     
     bot.move(move); %move the real robot. These movements are recorded for marking 
     bot.turn(turn);
@@ -131,6 +153,15 @@ while(n < maxNumOfIterations)
         particles(i).turn(turn); %turn the particle in the same way as the real robot
     end
     
+    figure(3)
+        hold off; %the drawMap() function will clear the drawing when hold is off
+        particles(1).drawMap(); %drawMap() turns hold back on again, so you can draw the botsn
+        for i =1:num
+            particles(i).drawBot(3); %draw particle with line length 3 and default color
+        end
+        Friend_mean.drawBot(30, 'r');
+        drawnow;
+        
     %% Drawing
     %only draw if you are in debug mode or it will be slow during marking
     figure(3)
@@ -142,4 +173,13 @@ while(n < maxNumOfIterations)
     plot(target(1),target(2),'Marker','o','Color','g');
     drawnow; 
 end
+
+%     botScan = bot.ultraScan();
+    difference_mean= zeros(360,1);
+    
+    for i=1:360   
+    Friend_meanScan = Friend_mean.ultraScan();
+    difference_mean(i) = norm(Friend_meanScan-botScan);
+    Friend_mean.setBotAng(i*pi/180);
+    end
 end
