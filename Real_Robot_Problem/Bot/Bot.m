@@ -207,11 +207,12 @@ classdef Bot
         
         function translate(bot, power_pct, distance_m)
 %             calibratedDistance_m = 1.0469 * distance_m + 0.001326;
-            
+            calibratedDistance_m = (distance_m + (distance_m * 0.0004));
+%             calibratedDistance_m = (distance_m + (distance_m * 0.0004)+ 0.001);
 %             bot.MotorsAB.Power = sign(calibratedDistance_m)*power_pct;
             bot.MotorsAB.Power = power_pct;
-%             bot.MotorsAB.TachoLimit = int32(abs((calibratedDistance_m/bot.WheelCircumference_m)*360));
-            bot.MotorsAB.TachoLimit = int32(abs((distance_m/bot.WheelCircumference_m)*360));
+            bot.MotorsAB.TachoLimit = int32(abs((calibratedDistance_m/bot.WheelCircumference_m)*360));
+%             bot.MotorsAB.TachoLimit = int32(abs((distance_m/bot.WheelCircumference_m)*360));
             
             bot.MotorsAB.SendToNXT();
             
@@ -221,5 +222,4 @@ classdef Bot
         end
     end
 end
-
 
