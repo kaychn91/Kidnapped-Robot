@@ -3,8 +3,8 @@ classdef Bot
     %   Detailed explanation goes here
     
     properties (Constant)
-        RobotRadius_m = 0.058;
-        WheelRadius_m = 0.028;
+        RobotRadius_m = 0.056;
+        WheelRadius_m = 0.029;
         WheelCircumference_m = 2*pi*Bot.WheelRadius_m;
     end
     
@@ -35,6 +35,9 @@ classdef Bot
             bot.MotorB.SpeedRegulation = false;
             
             bot.MotorC = NXTMotor('C');
+            bot.MotorC.ActionAtTachoLimit = 'Brake';
+            bot.MotorC.SmoothStart = true;
+            bot.MotorC.SpeedRegulation = false;
             
             bot.MotorsAB = NXTMotor('AB');
             bot.MotorsAB.ActionAtTachoLimit = 'Brake';
@@ -68,7 +71,7 @@ classdef Bot
         end
         
         function move(bot, distance_cm)
-           bot.translate(60, distance_cm/100); 
+           bot.translate(50, distance_cm/100); 
         end
         
         function turn(bot, angle_rad)
@@ -85,6 +88,9 @@ classdef Bot
                 survey(4, 2); 
                 survey(5, 2); 
                 survey(6, 2);
+                survey(7, 2);
+                survey(8, 2);
+                survey(9, 2)
                 ]; 
                 
         end
@@ -108,27 +114,55 @@ classdef Bot
         end
         
         function rotate(bot, power_pct, angle_deg)
-%             calibratedAngle_deg = 1.074 * angle_deg + 3.8933;
+%             calibratedAngle_deg = 0.013 * angle_deg + angle_deg;
 %             tachoLimit = int32((bot.RobotRadius_m/bot.WheelRadius_m)*abs(calibratedAngle_deg));
-            tachoLimit = int32((bot.RobotRadius_m/bot.WheelRadius_m)*abs(angle_deg));
-
+% 
 %             bot.MotorA.Power = sign(calibratedAngle_deg)*power_pct;
-            bot.MotorA.Power = power_pct;
-            bot.MotorA.TachoLimit = tachoLimit;
-                        
-            bot.MotorA.SendToNXT();
+%             bot.MotorA.TachoLimit = tachoLimit;
+%                         
+%             bot.MotorA.SendToNXT();
+% 
+%             bot.MotorB.Power = -sign(calibratedAngle_deg)*power_pct;            
+%             bot.MotorB.TachoLimit = tachoLimit;
+%             
+%             bot.MotorB.SendToNXT();
+%             
+%             bot.MotorA.WaitFor();
+%             bot.MotorB.WaitFor();
+%             
+%             bot.MotorA.Stop();
+%             bot.MotorB.Stop();
+%             % -------------------------------------
+                % -------------------------------------
+                calibratedAngle_deg = 0.013 * angle_deg + angle_deg;
+                tachoLimit = int32((bot.RobotRadius_m/bot.WheelRadius_m)*abs(calibratedAngle_deg));
+                %--------------------------------------
+                bot.MotorA.TachoLimit = int16(tachoLimit);
+                bot.MotorB.TachoLimit = int16(tachoLimit);
+                %--------------------------------------
+                % -------------------------------------    
+                if angle_deg > 0
+                    %right moved backword
+                    %left moved forward
+                  bot.MotorA.Power =  power_pct;  
+                  bot.MotorB.Power = -power_pct;  
+                elseif angle_deg == 0 || angle_deg == 2 * pi
+                     
+                else
+                    %right moved forward
+                    %left moved backword
+                  bot.MotorA.Power = power_pct;  
+                  bot.MotorB.Power = -power_pct;  
+                end
+                % --------------------------------------
+                bot.MotorA.SendToNXT();
+                bot.MotorB.SendToNXT();
 
-%             bot.MotorB.Power = -sign(calibratedAngle_deg)*power_pct; 
-            bot.MotorB.Power = -power_pct;
-            bot.MotorB.TachoLimit = tachoLimit;
-            
-            bot.MotorB.SendToNXT();
-            
-            bot.MotorA.WaitFor();
-            bot.MotorB.WaitFor();
-            
-            bot.MotorA.Stop();
-            bot.MotorB.Stop();
+                bot.MotorA.WaitFor();
+                bot.MotorB.WaitFor();
+
+                bot.MotorA.Stop();
+                bot.MotorB.Stop();
         end
        
         function rotateDistanceSensor(bot, power_pct, angle_deg)
@@ -150,7 +184,8 @@ classdef Bot
             distances_cm = zeros(count, 2);
             
 %             % set initial position
-              totAngle_deg = 300;
+              totAngle_deg = 320;
+
 %             rotateDistanceSensor(bot, power_pct, totAngle_deg);
             
             for i = 1:count
@@ -161,7 +196,7 @@ classdef Bot
 %                 
                 if i < count
                     % update position 
-                    rotateDistanceSensor(bot, power_pct, -angle_deg);
+                    rotateDistanceSensor(bot, -power_pct, angle_deg);
 %                     totAngle_deg = totAngle_deg - angle_deg;
                 end
             end
@@ -186,4 +221,5 @@ classdef Bot
         end
     end
 end
+
 
