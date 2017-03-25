@@ -151,8 +151,8 @@ classdef Bot
                 else
                     %right moved forward
                     %left moved backword
-                  bot.MotorA.Power = power_pct;  
-                  bot.MotorB.Power = -power_pct;  
+                  bot.MotorA.Power =-power_pct;  
+                  bot.MotorB.Power = power_pct;  
                 end
                 % --------------------------------------
                 bot.MotorA.SendToNXT();
