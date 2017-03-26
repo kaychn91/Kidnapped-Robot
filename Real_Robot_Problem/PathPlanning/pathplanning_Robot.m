@@ -9,10 +9,10 @@ modifiedMap = map;
 
 %% Plot the chosen path
 
-stPoint = [22 62];
-botAng = 3*(pi/2);
+stPoint = [30 85];
+botAng = 0;
 
-h = round(dims(1)/2);
+h = round(dims(1));
 
 fprintf('Starting Point: %.3f, %.3f \n', stPoint);
 fprintf('Starting Angle: %.3f \n', botAng);
@@ -73,7 +73,7 @@ withinBounds = ones(RI,1);
 
      for j = 1:6
 
-         if boundary(j,1) <= 15 && i ~= 1 && i ~= 2
+         if boundary(j,1) <= 20 && i ~= 1 && i ~= 2
 
              withinBounds(i,1) = 0;   
 
@@ -140,11 +140,11 @@ for i = 1:z
         
         POLresults = ones(numPoints,1);
         
-        for k = 1:numPoints
+        for k = 1:numPoints-2
             pointsOnLine(k) = BotSim(modifiedMap);
             pointsOnLine(k).setBotPos(particle.getBotPos());
             pointsOnLine(k).setBotAng(particle.getBotAng());
-            pointsOnLine(k).move(onLineDist*k);
+            pointsOnLine(k).move(onLineDist*(k+1));
             pointsOnLine(k).setScanConfig(botSim.generateScanConfig(6));
             POLscan = pointsOnLine(k).ultraScan();
             for l = 1:6
@@ -154,13 +154,14 @@ for i = 1:z
             end
         end
         Lia = ismember(0,POLresults);
-        if sc > dist && (i == 1 || j == 2)
+%         if sc > dist && (i == 1 || j == 2)
+%             pairs(STindex,:) = [i j];
+%             STindex = STindex +1;
+%         else 
+        if sc > dist && Lia == 0 
             pairs(STindex,:) = [i j];
             STindex = STindex +1;
-        else if sc > dist && Lia == 0 && i > 2
-            pairs(STindex,:) = [i j];
-            STindex = STindex +1;
-            end
+           
         end
     end
 end
@@ -205,16 +206,16 @@ for i = 2:tests
      bAng = atan(by/bx);
      %disp(bAng);
     
-%      if(by > 0 && bx < 0)
-%             bAng = bAng + pi;
-%      end
-%      if (by < 0 && bx < 0)
-%         bAng = bAng -pi; 
-%      end
+     if(by > 0 && bx < 0)
+            bAng = bAng + pi;
+     end
+     if (by < 0 && bx < 0)
+        bAng = bAng -pi; 
+     end
 
-      if((by < 0 && bx < 0)||(by>0 && bx < 0))
-          bAng = bAng + pi;
-      end
+%       if((by < 0 && bx < 0)||(by>0 && bx < 0))
+%           bAng = bAng + pi;
+%       end
      turn = bAng-curAng;
      
      disp(turn);
